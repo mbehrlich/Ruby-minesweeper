@@ -1,6 +1,6 @@
 class Tile
   attr_accessor :number
-  attr_reader :bomb :revealed
+  attr_reader :bomb, :revealed
 
   def initialize(bomb_chance)
     @revealed = false
@@ -20,11 +20,15 @@ class Tile
   end
 
   def flag
-    @flag = true unless @revealed
+    if @flag == true
+      @flag = false
+    elsif @revealed == false
+      @flag = true
+    end
   end
 
-  def to_s(end)
-    if @bomb && end
+  def to_s(end_game)
+    if @bomb && end_game
       'B'
     elsif @flag
       'F'

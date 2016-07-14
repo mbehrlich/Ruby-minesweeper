@@ -2,7 +2,7 @@ require_relative "Tile"
 
 class Board
 
-  attr_reader :grid
+  attr_reader :grid, :size
 
   def initialize(size, bomb_chance)
     @size = size
@@ -53,13 +53,13 @@ class Board
     self[pos].bomb
   end
 
-  def render(end = false)
+  def render(end_game = false)
     puts "  #{(0...@size).to_a.map(&:to_s).join(" ")}"
     @grid.each_with_index do |row,row_idx|
       print "#{row_idx} "
       row.each_with_index do |el,el_idx|
         pos = [row_idx,el_idx]
-        print "#{self[pos].to_s(end)} "
+        print "#{self[pos].to_s(end_game)} "
       end
       print "\n"
     end
@@ -67,8 +67,28 @@ class Board
 
   def reveal(pos)
     # returns true if you stepped on a bomb
+    x,y = pos
+    return if x < 0 || x >= @size || y < 0 || y >= @size
+    return if self[pos].revealed
+    #x,y = pos 
+    #return if x < 0 || x >= @size || y < 0 || y >= @size
     self[pos].reveal
+    if self[pos].number == 0
+      adjacent_reveal(pos)
+    end
     self[pos].bomb
+  end
+
+  def adjacent_reveal(pos)
+    x,y = pos
+    #sum = 0
+    (-1..1).each do |num1|
+      (-1..1).each do |num2|
+        #sum += 1 if bomb_check([x+num1,y+num2])
+        reveal([x+num1,y+num2])
+      end
+    end
+    #sum
   end
 
   def flag(pos)
