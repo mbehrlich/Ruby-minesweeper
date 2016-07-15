@@ -54,12 +54,20 @@ class Board
   end
 
   def render(end_game = false)
-    puts "  #{(0...@size).to_a.map(&:to_s).join(" ")}"
+    first_row = (0...@size).to_a.map do |num|
+      if num > 9
+        num.to_s + ' '
+      else
+        num.to_s + '  '
+      end
+    end
+    puts '   ' + first_row.join('')
     @grid.each_with_index do |row,row_idx|
-      print "#{row_idx} "
+      print "#{row_idx} " if row_idx > 9
+      print "#{row_idx}  " if row_idx < 10
       row.each_with_index do |el,el_idx|
         pos = [row_idx,el_idx]
-        print "#{self[pos].to_s(end_game)} "
+        print "#{self[pos].to_s(end_game)}  "
       end
       print "\n"
     end
