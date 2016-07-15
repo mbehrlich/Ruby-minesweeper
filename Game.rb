@@ -1,4 +1,5 @@
 require_relative "Board"
+require "yaml"
 
 class Game
 
@@ -10,6 +11,12 @@ class Game
   def play
     until bombed? || solved?
       @board.render()
+      puts "save?"
+      save = parse_save
+      if save
+        saved_game = self.to_yaml
+        p saved_game
+      end
       puts "enter position example = (0,0)"
       pos = parse_pos
       puts "press f for flag or r for reveal"
@@ -29,6 +36,12 @@ class Game
     end
 
   end
+  def parse_save
+    save = gets.chomp
+    return true if save.downcase == "y" || save.downcase == "yes"
+    false
+  end
+
 
   def parse_pos
     pos = gets.chomp

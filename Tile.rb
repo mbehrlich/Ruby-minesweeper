@@ -40,4 +40,12 @@ class Tile
 
   end
 
+  # def bombed?
+  #   @bombed
+  # end
+  #
+  # def revealed?
+  #   @revealed
+  # end
+
 end

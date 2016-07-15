@@ -8,12 +8,12 @@ class Board
     @size = size
     @bomb_chance = bomb_chance
   end
-  def []=(pos,value)
-    x,y = pos
+  def []=(pos, value)
+    x, y = pos
     @grid[x][y] = value
   end
   def [](pos)
-    x,y = pos
+    x, y = pos
     @grid[x][y]
   end
 
@@ -28,9 +28,9 @@ class Board
   end
 
   def assign_numbers
-    @grid.each_with_index do |row,row_idx|
-      row.each_with_index do |el,el_idx|
-        pos = [row_idx,el_idx]
+    @grid.each_with_index do |row, row_idx|
+      row.each_with_index do |el, el_idx|
+        pos = [row_idx, el_idx]
         self[pos].number = adjacents(pos)
       end
     end
@@ -41,7 +41,7 @@ class Board
     sum = 0
     (-1..1).each do |num1|
       (-1..1).each do |num2|
-        sum += 1 if bomb_check([x+num1,y+num2])
+        sum += 1 if bomb_check([x + num1,y + num2])
       end
     end
     sum
@@ -66,12 +66,9 @@ class Board
   end
 
   def reveal(pos)
-    # returns true if you stepped on a bomb
     x,y = pos
     return if x < 0 || x >= @size || y < 0 || y >= @size
     return if self[pos].revealed
-    #x,y = pos 
-    #return if x < 0 || x >= @size || y < 0 || y >= @size
     self[pos].reveal
     if self[pos].number == 0
       adjacent_reveal(pos)
@@ -81,14 +78,11 @@ class Board
 
   def adjacent_reveal(pos)
     x,y = pos
-    #sum = 0
     (-1..1).each do |num1|
       (-1..1).each do |num2|
-        #sum += 1 if bomb_check([x+num1,y+num2])
         reveal([x+num1,y+num2])
       end
     end
-    #sum
   end
 
   def flag(pos)
