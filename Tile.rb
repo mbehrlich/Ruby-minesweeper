@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Tile
   attr_accessor :number
   attr_reader :bomb, :revealed
@@ -29,13 +31,13 @@ class Tile
 
   def to_s(end_game)
     if @bomb && end_game
-      'B'
+      'B'.colorize(:red)
     elsif @flag
-      'F'
+      'F'.colorize(:blue)
     elsif !@revealed
       '_'
     elsif @revealed
-      @number
+      @number.to_s.colorize(:green)
     end
 
   end

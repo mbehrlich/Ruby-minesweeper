@@ -11,11 +11,17 @@ class Game
   def play
     until bombed? || solved?
       @board.render()
-      puts "save?"
+      puts "type save or load or press enter to continue"
       save = parse_save
-      if save
-        saved_game = self.to_yaml
-        p saved_game
+      if save == "s"
+        saved_game = @board.to_yaml
+        File.open("saved_game.txt", "w") { |file| file.write(saved_game)}
+      elsif save == "l"
+        f = File.open("saved_game.txt") { |file| data = file.read }
+        loaded_game = YAML::load(f)
+        @board = loaded_game
+        @board.render
+        #p# saved_game
       end
       puts "enter position example = (0,0)"
       pos = parse_pos
@@ -38,8 +44,14 @@ class Game
   end
   def parse_save
     save = gets.chomp
-    return true if save.downcase == "y" || save.downcase == "yes"
-    false
+   if save.downcase == "s" || save.downcase == "save"
+     return "s"
+   elsif save.downcase == "l" || save.downcase == "load"
+     return "l"
+   else
+     false
+   end
+
   end
 
 
@@ -88,5 +100,17 @@ class Game
 
 end
 
-game = Game.new(4)
+puts "How big do you want the board? (Enter a number)"
+size = gets.chomp.to_i
+until (1..50).to_a.include?(size)
+  puts "invalid size, enter a number between 1 and 50"
+  size = gets.chomp.to_i
+end
+puts "Enter difficulty (1-9)"
+diff = gets.chomp.to_i
+until (1...10).to_a.include?(diff)
+  puts "Invalid difficulty enter a number between 1 and 9"
+  diff = gets.chomp.to_i
+end
+game = Game.new(size, diff)
 game.play
